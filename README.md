@@ -11,7 +11,7 @@
 - OBS 에서 소스 목록 - 브라우저 URL 에 아래 주소를 입력합니다.
 - https://minisv.github.io/ChzzkPartyMaker/?chzzk=
 - 위의 주소 chzzk= 뒤 부분에 여러분의 방송 chatChannelID 를 입력 합니다.
-- 파티를 모집할때 채팅창에 일반시청자가 아닌 아이디로 파티 라고 입력 합니다. (스트리머만 가능합니다.)
+- 파티를 모집할때 스트리머가 채팅에 "파티" 라고 입력 합니다.
 
 ## chatChannelID 알아오는 방법
 
