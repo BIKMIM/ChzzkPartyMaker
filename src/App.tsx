@@ -143,7 +143,9 @@ function App() {
     if (role !== 'common_user' && msg === '파티') setIsShow(true)
     if (isShow) {
       if (msg === '취소') {
-
+        setMembers([])
+        setSelectedMember(null)
+        return
       } else {
         const matchedData = findWoWClassBySpecificity(msg)
         if (matchedData) {
@@ -452,6 +454,14 @@ function App() {
               ⚕️ 힐러
             </button>
           </div>
+        </div>
+        <div>
+          <button
+            onClick={() => setIsShow(false)}
+            className="w-full px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-semibold"
+          >
+            🚫 종료
+          </button>
         </div>
       </div>
     </div>
