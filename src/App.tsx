@@ -285,7 +285,7 @@ function App() {
   }, [])
 
   return (
-    <div style={{ display: isShow ? 'flex' : 'none' }}>
+    <>
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -298,188 +298,190 @@ function App() {
         pauseOnHover
         theme="dark"
       />
-      <div
-        className="w-[1000px] h-[800px] bg-black bg-opacity-80 border border-b-green-300"
-      >
-        {isRolling && selectedMember && (
-          <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
-            <div className="bg-white p-8 rounded-lg shadow-2xl animate-bounce">
-              <div className="text-4xl font-bold text-center mb-4">🎰</div>
-              <div className="text-2xl font-bold mb-2">{selectedMember.nick}</div>
-              <div className="text-lg text-gray-600">{selectedMember.job}</div>
-              <div className="text-lg text-gray-600">{selectedMember.role}</div>
-            </div>
-          </div>
-        )}
-
-        <div className="w-[200px] h-[800px] border border-b-blue-300 overflow-y-auto p-2">
-          {[...members].reverse().filter(member => !member.selected).map((member, index) => (
-            <div
-              key={index}
-              className="group h-32 w-full mb-2 [perspective:1000px]"
-            >
-              <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-white [backface-visibility:hidden]">
-                  <div className="text-sm text-gray-600">{member.job}</div>
-                  <div className="text-sm text-gray-600">{member.role}</div>
-                  <div className="font-semibold">{member.nick}</div>
-                </div>
-                <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-gray-50 [backface-visibility:hidden] [transform:rotateY(180deg)] flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => {
-                      setMembers((prev) =>
-                        prev.map((m) =>
-                          m.nick === member.nick ? { ...m, selected: true } : m
-                        )
-                      )
-                    }}
-                    className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors"
-                  >
-                    패스
-                  </button>
-                  <button
-                    onClick={() => {
-                      setMembers((prev) =>
-                        prev.filter((m) => m.nick !== member.nick)
-                      )
-                    }}
-                    className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors"
-                  >
-                    취소
-                  </button>
-                </div>
+      {isShow && (
+        <div
+          className="w-[1000px] h-[800px] bg-black bg-opacity-80 border border-b-green-300 flex"
+        >
+          {isRolling && selectedMember && (
+            <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+              <div className="bg-white p-8 rounded-lg shadow-2xl animate-bounce">
+                <div className="text-4xl font-bold text-center mb-4">🎰</div>
+                <div className="text-2xl font-bold mb-2">{selectedMember.nick}</div>
+                <div className="text-lg text-gray-600">{selectedMember.job}</div>
+                <div className="text-lg text-gray-600">{selectedMember.role}</div>
               </div>
             </div>
-          ))}
-        </div>
-        <div className="w-[600px] h-[800px] border border-b-green-300 grid grid-cols-3 gap-4 p-4 overflow-y-auto">
-          {members
-            .filter(member => member.selected)
-            .sort((a, b) => {
-              const roleOrder: Record<string, number> = { '탱커': 0, '딜러': 1, '힐러': 2 };
-              return roleOrder[a.role] - roleOrder[b.role]
-            })
-            .map((member, index) => (
+          )}
+
+          <div className="w-[200px] h-[800px] border border-b-blue-300 overflow-y-auto p-2">
+            {[...members].reverse().filter(member => !member.selected).map((member, index) => (
               <div
                 key={index}
-                className="group h-32 [perspective:1000px]"
+                className="group h-32 w-full mb-2 [perspective:1000px]"
               >
                 <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
-                  <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-white [backface-visibility:hidden] flex flex-col justify-center">
+                  <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-white [backface-visibility:hidden]">
                     <div className="text-sm text-gray-600">{member.job}</div>
                     <div className="text-sm text-gray-600">{member.role}</div>
                     <div className="font-semibold">{member.nick}</div>
                   </div>
-                  <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-red-50 [backface-visibility:hidden] [transform:rotateY(180deg)] flex items-center justify-center">
+                  <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-gray-50 [backface-visibility:hidden] [transform:rotateY(180deg)] flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => {
+                        setMembers((prev) =>
+                          prev.map((m) =>
+                            m.nick === member.nick ? { ...m, selected: true } : m
+                          )
+                        )
+                      }}
+                      className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 transition-colors"
+                    >
+                      패스
+                    </button>
                     <button
                       onClick={() => {
                         setMembers((prev) =>
                           prev.filter((m) => m.nick !== member.nick)
                         )
                       }}
-                      className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors font-semibold"
+                      className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors"
                     >
-                      삭제
+                      취소
                     </button>
                   </div>
                 </div>
               </div>
             ))}
-        </div>
-        <div className="w-[200px] h-[800px] border border-b-blue-300 p-4 overflow-y-auto">
-          <div className="mb-4">
-            <h3 className="font-bold text-lg mb-2">신청 방법</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              채팅에 자신의 특성을 입력해주세요
-            </p>
           </div>
-          <div className="space-y-3 mb-6">
-            {wowClasses.map((wowClass) => (
-              <div
-                key={wowClass.class}
-                className="border-b pb-3 cursor-pointer hover:bg-gray-800 p-2 rounded transition-colors"
-                onClick={() => handleRandomByClass(wowClass.class)}
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <img
-                    src={wowClass.image}
-                    alt={wowClass.class}
-                    className="w-8 h-8 rounded"
-                  />
-                  <span
-                    className="font-bold"
-                    style={{ color: wowClass.color }}
-                  >
-                  {wowClass.class}
-                </span>
+          <div className="w-[600px] h-[800px] border border-b-green-300 grid grid-cols-3 gap-4 p-4 overflow-y-auto">
+            {members
+              .filter(member => member.selected)
+              .sort((a, b) => {
+                const roleOrder: Record<string, number> = { '탱커': 0, '딜러': 1, '힐러': 2 };
+                return roleOrder[a.role] - roleOrder[b.role]
+              })
+              .map((member, index) => (
+                <div
+                  key={index}
+                  className="group h-32 [perspective:1000px]"
+                >
+                  <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-white [backface-visibility:hidden] flex flex-col justify-center">
+                      <div className="text-sm text-gray-600">{member.job}</div>
+                      <div className="text-sm text-gray-600">{member.role}</div>
+                      <div className="font-semibold">{member.nick}</div>
+                    </div>
+                    <div className="absolute inset-0 border border-gray-300 p-4 rounded bg-red-50 [backface-visibility:hidden] [transform:rotateY(180deg)] flex items-center justify-center">
+                      <button
+                        onClick={() => {
+                          setMembers((prev) =>
+                            prev.filter((m) => m.nick !== member.nick)
+                          )
+                        }}
+                        className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600 transition-colors font-semibold"
+                      >
+                        삭제
+                      </button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-1 ml-10">
-                  {wowClass.jobs.map((job) => (
+              ))}
+          </div>
+          <div className="w-[200px] h-[800px] border border-b-blue-300 p-4 overflow-y-auto">
+            <div className="mb-4">
+              <h3 className="font-bold text-lg mb-2">신청 방법</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                채팅에 자신의 특성을 입력해주세요
+              </p>
+            </div>
+            <div className="space-y-3 mb-6">
+              {wowClasses.map((wowClass) => (
+                <div
+                  key={wowClass.class}
+                  className="border-b pb-3 cursor-pointer hover:bg-gray-800 p-2 rounded transition-colors"
+                  onClick={() => handleRandomByClass(wowClass.class)}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <img
+                      src={wowClass.image}
+                      alt={wowClass.class}
+                      className="w-8 h-8 rounded"
+                    />
                     <span
-                      key={job.specificity}
-                      className="text-xs px-2 py-1 rounded border"
-                      style={{
-                        borderColor: wowClass.color,
-                        color: wowClass.color
-                      }}
+                      className="font-bold"
+                      style={{ color: wowClass.color }}
                     >
-                    /{job.specificity}
-                  </span>
-                  ))}
+                {wowClass.class}
+              </span>
+                  </div>
+                  <div className="flex flex-wrap gap-1 ml-10">
+                    {wowClass.jobs.map((job) => (
+                      <span
+                        key={job.specificity}
+                        className="text-xs px-2 py-1 rounded border"
+                        style={{
+                          borderColor: wowClass.color,
+                          color: wowClass.color
+                        }}
+                      >
+                  /{job.specificity}
+                </span>
+                    ))}
+                  </div>
                 </div>
+              ))}
+            </div>
+            <div className="mb-4">
+              <h3 className="font-bold text-lg mb-2">취소 방법</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                채팅에 <span className="text-red-600 font-bold">취소</span>를 입력해주세요
+              </p>
+            </div>
+            <div className="mb-4 border-t pt-4">
+              <h3 className="font-bold text-lg mb-3 text-white">랜덤 선택</h3>
+              <div className="space-y-2">
+                <button
+                  onClick={handleRandomAll}
+                  disabled={isRolling}
+                  className="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                >
+                  🎲 랜덤
+                </button>
+                <button
+                  onClick={() => handleRandomByRole('탱커')}
+                  disabled={isRolling}
+                  className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                >
+                  🛡️ 탱커
+                </button>
+                <button
+                  onClick={() => handleRandomByRole('딜러')}
+                  disabled={isRolling}
+                  className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                >
+                  ⚔️ 딜러
+                </button>
+                <button
+                  onClick={() => handleRandomByRole('힐러')}
+                  disabled={isRolling}
+                  className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                >
+                  ⚕️ 힐러
+                </button>
               </div>
-            ))}
-          </div>
-          <div className="mb-4">
-            <h3 className="font-bold text-lg mb-2">취소 방법</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              채팅에 <span className="text-red-600 font-bold">취소</span>를 입력해주세요
-            </p>
-          </div>
-          <div className="mb-4 border-t pt-4">
-            <h3 className="font-bold text-lg mb-3 text-white">랜덤 선택</h3>
-            <div className="space-y-2">
+            </div>
+            <div>
               <button
-                onClick={handleRandomAll}
-                disabled={isRolling}
-                className="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                onClick={() => setIsShow(false)}
+                className="w-full px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-semibold"
               >
-                🎲 랜덤
-              </button>
-              <button
-                onClick={() => handleRandomByRole('탱커')}
-                disabled={isRolling}
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
-              >
-                🛡️ 탱커
-              </button>
-              <button
-                onClick={() => handleRandomByRole('딜러')}
-                disabled={isRolling}
-                className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
-              >
-                ⚔️ 딜러
-              </button>
-              <button
-                onClick={() => handleRandomByRole('힐러')}
-                disabled={isRolling}
-                className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
-              >
-                ⚕️ 힐러
+                🚫 종료
               </button>
             </div>
           </div>
-          <div>
-            <button
-              onClick={() => setIsShow(false)}
-              className="w-full px-4 py-3 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-semibold"
-            >
-              🚫 종료
-            </button>
-          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   )
 }
 
