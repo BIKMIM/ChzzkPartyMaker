@@ -285,7 +285,7 @@ function App() {
   }, [])
 
   return (
-    <>
+    <div style={{ display: isShow ? 'block' : 'none' }}>
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -299,8 +299,7 @@ function App() {
         theme="dark"
       />
       <div
-        className="w-[800px] h-[800px] bg-black bg-opacity-80 border border-b-green-300 flex"
-        style={{ display: isShow ? 'block' : 'none' }}
+        className="w-[1000px] h-[800px] bg-black bg-opacity-80 border border-b-green-300 flex"
       >
         {isRolling && selectedMember && (
           <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
@@ -353,7 +352,7 @@ function App() {
             </div>
           ))}
         </div>
-        <div className="w-[400px] h-[800px] border border-b-green-300 grid grid-cols-2 gap-4 p-4 overflow-y-auto">
+        <div className="w-[600px] h-[800px] border border-b-green-300 grid grid-cols-3 gap-4 p-4 overflow-y-auto">
           {members
             .filter(member => member.selected)
             .sort((a, b) => {
@@ -480,7 +479,7 @@ function App() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
