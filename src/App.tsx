@@ -285,7 +285,7 @@ function App() {
   }, [])
 
   return (
-    <div style={{ display: isShow ? 'block' : 'none' }}>
+    <div style={{ display: isShow ? 'flex' : 'none' }}>
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -299,7 +299,7 @@ function App() {
         theme="dark"
       />
       <div
-        className="w-[1000px] h-[800px] bg-black bg-opacity-80 border border-b-green-300 flex"
+        className="w-[1000px] h-[800px] bg-black bg-opacity-80 border border-b-green-300"
       >
         {isRolling && selectedMember && (
           <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
