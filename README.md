@@ -12,6 +12,9 @@
 - https://minisv.github.io/ChzzkPartyMaker/?chzzk=
 - 위의 주소 chzzk= 뒤 부분에 여러분의 방송 chatChannelID 를 입력 합니다.
 - 파티를 모집할때 스트리머가 채팅에 "파티" 라고 입력 합니다.
+- 권장 사이즈 : 너비 1000, 높이 850
+- 소스가 보이지 않는 경우 종료 체크 하기
+- 장면이 활성화되면 브라우저를 새로고침 체크 하기
 
 ## chatChannelID 알아오는 방법
 
