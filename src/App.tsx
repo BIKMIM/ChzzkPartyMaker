@@ -321,7 +321,7 @@ function App() {
                 >
                   <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
                     <div
-                      className="absolute inset-0 border border-gray-500 p-2 rounded-lg bg-gray-800 bg-opacity-80 [backface-visibility:hidden] flex items-center justify-center"
+                      className="absolute inset-0 border border-gray-500 p-2 rounded-lg bg-gray-800 bg-opacity-80 [backface-visibility:hidden] flex items-center justify-end"
                       style={{
                         backgroundImage: classImage ? `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${classImage})` : 'none',
                         backgroundSize: 'contain',
@@ -383,7 +383,7 @@ function App() {
                   >
                     <div className="relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
                       <div
-                        className="absolute inset-0 border border-gray-500 p-2 rounded-lg bg-gray-800 bg-opacity-80 [backface-visibility:hidden] flex items-center justify-center"
+                        className="absolute inset-0 border border-gray-500 p-2 rounded-lg bg-gray-800 bg-opacity-80 [backface-visibility:hidden] flex items-center justify-end"
                         style={{
                           backgroundImage: classImage ? `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${classImage})` : 'none',
                           backgroundSize: 'contain',
