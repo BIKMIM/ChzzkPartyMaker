@@ -470,28 +470,28 @@ function App() {
                 <button
                   onClick={handleRandomAll}
                   disabled={isRolling}
-                  className="px-2 py-2 bg-purple-600 text-white text-xs rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
+                  className="px-2 py-2 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
                 >
                   🎲 랜덤
                 </button>
                 <button
                   onClick={() => handleRandomByRole('탱커')}
                   disabled={isRolling}
-                  className="px-2 py-2 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
+                  className="px-2 py-2 bg-sky-600 text-white text-xs rounded-lg hover:bg-sky-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
                 >
                   🛡️ 탱커
                 </button>
                 <button
                   onClick={() => handleRandomByRole('딜러')}
                   disabled={isRolling}
-                  className="px-2 py-2 bg-red-600 text-white text-xs rounded-lg hover:bg-red-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
+                  className="px-2 py-2 bg-rose-600 text-white text-xs rounded-lg hover:bg-rose-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
                 >
                   ⚔️ 딜러
                 </button>
                 <button
                   onClick={() => handleRandomByRole('힐러')}
                   disabled={isRolling}
-                  className="px-2 py-2 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
+                  className="px-2 py-2 bg-emerald-600 text-white text-xs rounded-lg hover:bg-emerald-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
                 >
                   ⚕️ 힐러
                 </button>
@@ -506,7 +506,7 @@ function App() {
                   setSelectedMember(null)
                   setIsShow(false)
                 }}
-                className="w-full px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
+                className="w-full px-4 py-2.5 bg-slate-700 text-white rounded-lg hover:bg-slate-800 transition-colors font-semibold"
               >
                 🚫 종료
               </button>
