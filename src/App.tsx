@@ -89,7 +89,7 @@ function App() {
     },
     {
       class: '사냥꾼', image: wowHunter, color: '#ABD473',
-      jobs: [ { specificity: '야수', role: '딜러' }, { specificity: '사격', role: '딜러' }, { specificity: '생존', role: '힐러' } ]
+      jobs: [ { specificity: '야수', role: '딜러' }, { specificity: '사격', role: '딜러' }, { specificity: '생존', role: '딜러' } ]
     },
     {
       class: '도적', image: wowRogue, color: '#FFF569',
