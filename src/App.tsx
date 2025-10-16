@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import axios from 'axios'
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
 
@@ -179,28 +178,6 @@ function App() {
     }
   }
 
-  const getChatChannelID = async (): Promise<string> => {
-    try {
-      const params = new URLSearchParams(window.location.search)
-      const chzzkID = params.get('chzzk')
-      const data = await axios.get(
-        `https://api.chzzk.naver.com/polling/v2/channels/${chzzkID}/live-status`,
-        {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          }
-        }
-      )
-      if (data) {
-        const liveStatus = data.data.content
-        return liveStatus.chatChannelID
-      }
-      throw new Error('no data')
-    } catch (error) {
-      throw error
-    }
-  }
-
   const connectWebSocket = () => {
     const ssID = Math.floor(Math.random() * 10) + 1
     const serverUrl = `wss://kr-ss${ssID}.chat.naver.com/chat`
@@ -208,8 +185,9 @@ function App() {
     const socket = new WebSocket(serverUrl)
     socketRef.current = socket
 
-    socket.addEventListener('open', async () => {
-      const chatChannelID = await getChatChannelID()
+    socket.addEventListener('open', () => {
+      const params = new URLSearchParams(window.location.search)
+      const chatChannelID = params.get('chzzk')
       if (!chatChannelID) return
       const option = {
         ver: '2',
