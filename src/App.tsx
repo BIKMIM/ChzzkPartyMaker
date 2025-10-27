@@ -68,6 +68,15 @@ function App() {
   const [isRolling, setIsRolling] = useState(false)
   const [selectedMember, setSelectedMember] = useState<typeof members[0] | null>(null)
 
+// ▼▼▼ 역할 필터 체크박스 상태 (이것을 추가하세요) ▼▼▼
+  const [roleFilter, setRoleFilter] = useState({
+    tank: true,
+    healer: true,
+    dealer: true,
+  });
+  // ▲▲▲ 여기까지 추가 ▲▲▲
+
+
   const socketRef = useRef<WebSocket | null>(null)
   const isManualCloseRef = useRef(false)
   const wowClasses: WoWClasses[] = [
@@ -253,21 +262,44 @@ function App() {
   }
 
   const handleRandomAll = () => {
-    const available = members.filter(m => !m.selected)
-    rollupAnimation(available)
+    // 1. 아직 선택되지 않은 대기열 멤버
+    const available = members.filter(m => !m.selected);
+
+    // 2. 이미 선택된 파티 멤버
+    const selectedParty = members.filter(m => m.selected);
+
+    // 3. [요청사항] "최소 탱/힐 1명" 조건 검사
+    //    - 단, 이 검사는 파티원이 0명일 때 (첫 추첨 시)에만 작동합니다.
+    if (selectedParty.length === 0) {
+      const hasTankInPool = available.some(m => m.role === '탱커');
+      const hasHealerInPool = available.some(m => m.role === '힐러');
+      
+      if (!hasTankInPool || !hasHealerInPool) {
+        toast.error("대기열에 탱커와 힐러가 1명 이상 필요합니다!");
+        return;
+      }
+    }
+
+    // 4. [요청사항] 체크박스(roleFilter) 기준으로 대기열 필터링
+    const targetMembers = available.filter(m => {
+      if (roleFilter.tank && m.role === '탱커') return true;
+      if (roleFilter.healer && m.role === '힐러') return true;
+      if (roleFilter.dealer && m.role === '딜러') return true;
+      return false;
+    });
+
+    // 5. 필터링된 대상이 없으면 알림
+    if (targetMembers.length === 0) {
+      toast.warn('선택한 역할의 대기 멤버가 없습니다!');
+      return;
+    }
+
+    // 6. 필터링된 멤버들 중에서만 롤업 애니메이션 실행
+    rollupAnimation(targetMembers);
   }
 
-  const handleRandomByRole = (role: string) => {
-    const available = members.filter(m => !m.selected && m.role === role)
-    rollupAnimation(available)
-  }
 
-  const handleRandomByClass = (className: string) => {
-    const available = members.filter(m => !m.selected && m.job &&
-      wowClasses.find(wc => wc.class === className)?.jobs.some(j => j.specificity === m.job)
-    )
-    rollupAnimation(available)
-  }
+  
 
   useEffect(() => {
     connectWebSocket()
@@ -466,7 +498,42 @@ function App() {
             {/* 랜덤 선택 버튼 - 한 줄로 배치 */}
             <div className="mb-4 border-t border-gray-700 pt-3">
               <h3 className="font-bold text-lg mb-3 text-white">랜덤 선택</h3>
-              <div className="grid grid-cols-2 gap-2">
+              {/* ▼▼▼ 역할군 체크박스 (바로 이 부분을 추가하라는 의미였습니다!) ▼▼▼ */}
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {/* 탱커 체크박스 */}
+                <label className="flex items-center space-x-2 cursor-pointer text-xs text-white bg-gray-700 px-2 py-1.5 rounded-md hover:bg-sky-700">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4 rounded bg-gray-800 border-gray-600 text-sky-500 focus:ring-sky-500"
+                    checked={roleFilter.tank}
+                    onChange={() => setRoleFilter(prev => ({ ...prev, tank: !prev.tank }))}
+                  />
+                  <span>🛡️ 탱커</span>
+                </label>
+                {/* 딜러 체크박스 */}
+                <label className="flex items-center space-x-2 cursor-pointer text-xs text-white bg-gray-700 px-2 py-1.5 rounded-md hover:bg-rose-700">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4 rounded bg-gray-800 border-gray-600 text-rose-500 focus:ring-rose-500"
+                    checked={roleFilter.dealer}
+                    onChange={() => setRoleFilter(prev => ({ ...prev, dealer: !prev.dealer }))}
+                  />
+                  <span>⚔️ 딜러</span>
+                </label>
+                {/* 힐러 체크박스 */}
+                <label className="flex items-center space-x-2 cursor-pointer text-xs text-white bg-gray-700 px-2 py-1.5 rounded-md hover:bg-emerald-700">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4 rounded bg-gray-800 border-gray-600 text-emerald-500 focus:ring-emerald-500"
+                    checked={roleFilter.healer}
+                    onChange={() => setRoleFilter(prev => ({ ...prev, healer: !prev.healer }))}
+                  />
+                  <span>⚕️ 힐러</span>
+                </label>
+              </div>
+              {/* ▲▲▲ 여기까지 추가 ▲▲▲ */}
+              {/* ▼▼▼ "🎲 랜덤" 버튼이 여기 있어야 합니다! (이 div를 추가하세요) ▼▼▼ */}
+              <div className="grid grid-cols-1 gap-2">
                 <button
                   onClick={handleRandomAll}
                   disabled={isRolling}
@@ -474,30 +541,8 @@ function App() {
                 >
                   🎲 랜덤
                 </button>
-                <button
-                  onClick={() => handleRandomByRole('탱커')}
-                  disabled={isRolling}
-                  className="px-2 py-2 bg-gray-700 text-white text-xs rounded-lg hover:bg-sky-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
-                >
-                  🛡️ 탱커
-                </button>
-                <button
-                  onClick={() => handleRandomByRole('딜러')}
-                  disabled={isRolling}
-                  className="px-2 py-2 bg-gray-700 text-white text-xs rounded-lg hover:bg-rose-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
-                >
-                  ⚔️ 딜러
-                </button>
-                <button
-                  onClick={() => handleRandomByRole('힐러')}
-                  disabled={isRolling}
-                  className="px-2 py-2 bg-gray-700 text-white text-xs rounded-lg hover:bg-emerald-700 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
-                >
-                  ⚕️ 힐러
-                </button>
               </div>
-            </div>
-
+              {/* ▲▲▲ 여기까지 추가 ▲▲▲ */}
             {/* 닫기 버튼 */}
             <div className="border-t border-gray-700 pt-3">
               <button
