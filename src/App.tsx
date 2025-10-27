@@ -463,7 +463,6 @@ function App() {
                 <div
                   key={wowClass.class}
                   className="cursor-pointer hover:bg-gray-800 transition-colors"
-                  onClick={() => handleRandomByClass(wowClass.class)}
                 >
                   <div className="flex items-center gap-1.5">
                     <img
@@ -543,6 +542,7 @@ function App() {
                 </button>
               </div>
               {/* ▲▲▲ 여기까지 추가 ▲▲▲ */}
+              </div>
             {/* 닫기 버튼 */}
             <div className="border-t border-gray-700 pt-3">
               <button
