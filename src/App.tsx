@@ -261,40 +261,52 @@ function App() {
     }, 100)
   }
 
-  const handleRandomAll = () => {
-    // 1. 아직 선택되지 않은 대기열 멤버
+const handleRandomAll = () => {
+    // 1. 현재 파티(이미 선택된 멤버)에 누가 있는지 확인합니다.
+    const selectedParty = members.filter(m => m.selected);
+    const hasTank = selectedParty.some(m => m.role === '탱커');
+    const hasHealer = selectedParty.some(m => m.role === '힐러');
+
+    // 2. 아직 선택되지 않은 대기열 멤버를 가져옵니다.
     const available = members.filter(m => !m.selected);
 
-    // 2. 이미 선택된 파티 멤버
-    const selectedParty = members.filter(m => m.selected);
-
-    // 3. [요청사항] "최소 탱/힐 1명" 조건 검사
-    //    - 단, 이 검사는 파티원이 0명일 때 (첫 추첨 시)에만 작동합니다.
-    if (selectedParty.length === 0) {
-      const hasTankInPool = available.some(m => m.role === '탱커');
-      const hasHealerInPool = available.some(m => m.role === '힐러');
-      
-      if (!hasTankInPool || !hasHealerInPool) {
-        toast.error("대기열에 탱커와 힐러가 1명 이상 필요합니다!");
-        return;
-      }
-    }
-
-    // 4. [요청사항] 체크박스(roleFilter) 기준으로 대기열 필터링
+    // 3. [요청사항 수정] 대기열 멤버들을 필터링합니다.
+    //    - 이미 뽑힌 역할군(탱/힐)은 체크박스 상태와 관계없이 제외합니다.
+    //    - 그 외에는 체크된 역할군만 대상으로 합니다.
     const targetMembers = available.filter(m => {
+      // 조건 1: 이미 파티에 탱커가 있다면, 현재 멤버가 탱커면 무조건 제외 (false)
+      if (hasTank && m.role === '탱커') return false;
+      // 조건 2: 이미 파티에 힐러가 있다면, 현재 멤버가 힐러면 무조건 제외 (false)
+      if (hasHealer && m.role === '힐러') return false;
+
+      // 조건 3: 위에서 제외되지 않았다면, 체크박스 상태를 따릅니다.
       if (roleFilter.tank && m.role === '탱커') return true;
       if (roleFilter.healer && m.role === '힐러') return true;
       if (roleFilter.dealer && m.role === '딜러') return true;
+
+      // 위 모든 조건에 해당하지 않으면 제외 (false)
       return false;
     });
 
-    // 5. 필터링된 대상이 없으면 알림
+    // 4. 필터링 후 대상이 없으면 알림
+    //    - 이전에 있던 "최소 탱/힐 1명" 검사는 삭제되었습니다.
     if (targetMembers.length === 0) {
-      toast.warn('선택한 역할의 대기 멤버가 없습니다!');
-      return;
+       // 어떤 이유로 대상이 없는지 조금 더 상세하게 알려줍니다.
+       const availableFilteredByCheckboxOnly = available.filter(m => {
+            if (roleFilter.tank && m.role === '탱커') return true;
+            if (roleFilter.healer && m.role === '힐러') return true;
+            if (roleFilter.dealer && m.role === '딜러') return true;
+            return false;
+       });
+       if(availableFilteredByCheckboxOnly.length === 0){
+           toast.warn('선택한 역할의 대기 멤버가 없습니다!');
+       } else {
+           toast.warn('현재 파티 구성에 맞는 역할의 대기 멤버가 없습니다!');
+       }
+       return;
     }
 
-    // 6. 필터링된 멤버들 중에서만 롤업 애니메이션 실행
+    // 5. 최종 필터링된 멤버들로 롤업 애니메이션 실행
     rollupAnimation(targetMembers);
   }
 
@@ -401,7 +413,7 @@ function App() {
           {/* 중간: 선택된 멤버 - 600px 유지 */}
           <div className="w-[500px] h-[800px] border-r border-gray-700 grid grid-cols-3 gap-4 p-4 overflow-y-auto bg-gray-800 bg-opacity-30">
             {members
-              .filter(member => member.selected)
+              .filter(member => member.selected)  
               .sort((a, b) => {
                 const roleOrder: Record<string, number> = { '탱커': 0, '딜러': 1, '힐러': 2 };
                 return roleOrder[a.role] - roleOrder[b.role]
